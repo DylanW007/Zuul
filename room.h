@@ -107,11 +107,21 @@ public:
     string getShortDescription() { return description; }
 
     // Return a string describing the room's exits, for example "Exits: north west".
-    string getExitString() { return ""; }
+    string getExitString() { 
+        string returnString = "Exits:";
+        // Reference: https://medium.com/@ryan_forrester_/how-to-iterate-through-a-map-in-c-8aa459ea8bc5
+        for (const auto& pair : exits) {
+            returnString += " " + pair.first;
+        }
+        return returnString;
+    }
+
     // Return a long description of this room, in the form: 
     // You are in the kitchen.
     // Exits: north west
-    string getLongDescription() { return ""; }
+    string getLongDescription() {
+        return "You are " + description + ".\n" + getItemsDescription() + "\n" + getExitString();
+    }
 
 private:
     string name; // give rooms name so we can check for game conditions
