@@ -69,6 +69,7 @@ public:
             items.erase(itr);
         }
     }
+
     // does room have item?
     bool hasItem(string item_str) {
         // Reference: https://www.geeksforgeeks.org/check-if-an-element-is-present-in-a-vector-in-cpp/
@@ -81,14 +82,27 @@ public:
     }
 
     // set a lock on this room. Meaning you can't access this room without the key in your inventory
-    void setLock(string lock_str) {}
+    void setLock(string lock_str) { lock = lock_str; }
     // get lock string for room
     string getLock() { return lock; }
     // does room have a lock?
-    bool hasLock() { return false; }
+    bool hasLock() { return lock != ""; }
 
     // Return description of items in room
-    string getItemsDescription() { return ""; }
+    string getItemsDescription() { 
+        string str = "\n";
+        if (items.empty()) { //If no items...
+            str += "No items seen in room. \n";
+            return str;
+        }
+        
+        str = "You see the following items..."; 
+        for (string item : items) { //If items...
+            str += "\n    " + item + " ";
+        }
+        str += "\n";
+        return str;
+    }
     // Return the description of the room (the one that was defined.
     string getShortDescription() { return description; }
 
