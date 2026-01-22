@@ -11,6 +11,7 @@ Note: This code is ported from the original Python version by galbraithja.
 #include <string>
 #include <map>
 #include <vector>
+#include <algorithm>  // Reference: https://www.geeksforgeeks.org/cpp/std-find-in-cpp/
 
 using namespace std;
 
@@ -26,8 +27,16 @@ public:
 
     // add hasExits to test whether exit exists in room
     bool hasExit(string direction) {
-        return exits.find(direction) != exits.end();
+        // Reference: https://cplusplus.com/reference/map/map/find/
+        map<string, Room*>::iterator it;
+
+        it = exits.find(direction);
+        if (it != exits.end()) {
+            return true;
+        }
+        return false;
     }
+
     // Define an exit from this room.
     void setExit(string direction, Room* neighbor) {
         exits[direction] = neighbor;
@@ -35,18 +44,41 @@ public:
 
     // Return the room that is reached if we go from this room in direction "direction". If there is no room in that direction, return null.
     Room* getExit(string direction) {
+        // check if exit exists first using hasExit()
         if (hasExit(direction)) {
+            // safe to return exit now
             return exits[direction];
         }
         return nullptr;
     }
 
     // add item to room
-    void addItem(string item_str) {}
+    void addItem(string item_str) {
+        items.push_back(item_str);
+    }
+
     // remove item from room
-    void removeItem(string item_str) {}
+    void removeItem(string item_str) {
+        if (hasItem(item_str) == false) {
+            return; // item not in room
+        }
+        
+        // Reference: https://stackoverflow.com/questions/40453469/removing-a-string-from-a-stdvector
+        std::vector<string>::iterator itr = std::find(items.begin(), items.end(), item_str);
+        if (itr != items.end()) {
+            items.erase(itr);
+        }
+    }
     // does room have item?
-    bool hasItem(string item_str) { return false; }
+    bool hasItem(string item_str) {
+        // Reference: https://www.geeksforgeeks.org/check-if-an-element-is-present-in-a-vector-in-cpp/
+        for (string item : items) {
+            if (item == item_str) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     // set a lock on this room. Meaning you can't access this room without the key in your inventory
     void setLock(string lock_str) {}
