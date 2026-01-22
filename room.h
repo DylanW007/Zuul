@@ -25,11 +25,21 @@ public:
     string getName() { return name; }
 
     // add hasExits to test whether exit exists in room
-    bool hasExit(string direction) { return false; }
+    bool hasExit(string direction) {
+        return exits.find(direction) != exits.end();
+    }
     // Define an exit from this room.
-    void setExit(string direction, Room* neighbor) {}
+    void setExit(string direction, Room* neighbor) {
+        exits[direction] = neighbor;
+    }
+
     // Return the room that is reached if we go from this room in direction "direction". If there is no room in that direction, return null.
-    Room* getExit(string direction) { return nullptr;} 
+    Room* getExit(string direction) {
+        if (hasExit(direction)) {
+            return exits[direction];
+        }
+        return nullptr;
+    }
 
     // add item to room
     void addItem(string item_str) {}
