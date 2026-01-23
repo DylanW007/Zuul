@@ -10,6 +10,10 @@ Note: This code is ported from the original Python version by galbraithja.
 */
 #include "game.h"
 
+#include <iostream>
+#include <string>
+#include <algorithm>
+
 using namespace std;
 
 // Create all the rooms and link their exits together.
@@ -353,12 +357,40 @@ bool Game::processCommand(Command command) {
         goRoom(command);
     } else if (commandWord == "quit") {
         wantToQuit = quitGame(command);
-    }
-    // Add look to see whats in current room.
-    else if (commandWord == "look") {
+    } else if (commandWord == "look") {
         cout << currentRoom->getLongDescription() << endl;
+    } else if (commandWord == "inventory") {
+        cout << getInventoryDescription() << endl;
+    } else if (commandWord == "get") {
+        string itemToGet = command.getSecondWord();
+        if (currentRoom) {
+            if (currentRoom->hasItem(itemToGet)) {
+                inventory.push_back(itemToGet);
+                currentRoom->removeItem(itemToGet);
+                cout << "You've added " << itemToGet << " to your inventory" << endl;
+            } else {
+                cout << "Room does not have " << itemToGet << " item." << endl;
+            }
+        } else {
+            cout << "Error: Current room is not set!" << endl;
+        }
+    } else if (commandWord == "drop") {
+        string itemToDrop = command.getSecondWord();
+        
+        auto itr = find(inventory.begin(), inventory.end(), itemToDrop);
+        if (itr != inventory.end()) {
+            inventory.erase(itr);
+            currentRoom->addItem(itemToDrop);
+            cout << "You have dropped " << itemToDrop << "." << endl;
+        } else {
+            cout << "You do not have " << itemToDrop << " in your inventory!" << endl;
+        }
     }
 
+    if (quit) {
+        wantToQuit = true;
+    }
+    
     return wantToQuit;
 }
 
