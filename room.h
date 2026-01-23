@@ -22,7 +22,7 @@ using namespace std;
 class Room {
 public:
     // Create a room described "description". Initially, it has no exits. "description" is something like "in a kitchen" or "in an open court yard".
-    Room(string name, string description) {}
+    Room(string name, string description);
    ~Room() {}
 
     void setName(string name) { this->name = name; }
