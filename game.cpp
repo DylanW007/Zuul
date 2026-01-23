@@ -17,145 +17,6 @@ Note: This code is ported from the original Python version by galbraithja.
 using namespace std;
 
 // Create all the rooms and link their exits together.
-
-/*
-def createRooms(self):
-        # create the rooms
-        
-        # ---- medical sector ----
-        # recovery
-        # intensive care
-        # operating room
-        
-        # ---- power sector ----
-        # zuul power plant
-        # faraday power plant
-        # transfer room - tranfer power to station from either zuul or archimedis
-        
-        # --- control sector ----
-        # control room - controlling all systems on station
-        # auxilary room - for backup systems
-        
-        # --- life sector ---
-        # oxygen room
-        # water room
-        # cafeteria
-        
-        # --- command sector
-        # command deck - main room for captain and crew maintain operations
-        # communications room - room for communicating back to earth and rest of station
-        
-        # --- science sector ---
-        # lab 01
-        # lab 02
-        
-        # Items:
-        # blue keycard to get into transfer room. You need to go meet captain in control room
-        # red keycard to get into zuul power room.
-        # zuul program manual needed to start system
-        # faraday program manual needed to shut down system
-        # tool kit needed to unscrew panel covers, etc.
-        
-        # create the rooms
-        
-        # -- main hallways
-        west_hall = Room("West Hall", "in the West hallway")
-        east_hall = Room("East Hall", "in the East hallway")
-        
-        # -- control sector
-        control_room = Room("Control Room", "in the Control room")
-        aux_room = Room("Auxilary Room", "in the Auxilary room")
-        
-        # -- command sector
-        command_room = Room("Command Room", "in the Command room")
-        communications_room = Room("Communications Room", "in the Communications room")
-        
-        # -- power sector
-        zuul_room = Room("Zuul Room", "in the Zuul power room")
-        faraday_room = Room("Faraday Room", "in the Faraday power room")
-        transfer_room = Room("Transfer Room", "in the Transfer room")
-        
-        # science sector
-        lab1 = Room("Lab 1", "in Lab 1 science room")
-        lab2 = Room("Lab 2", "in Lab 2 science room")
-        
-        # cafeteria
-        cafeteria = Room("Cafeteria", "in the cafeteria")
-        
-        # Life support sector
-        water_room = Room("Water Room", "in the water room")
-        air_room = Room("Air Room", "in the air room")
-        
-        # Medical sector
-        recovery_room = Room("Recovery", "in the medical recovery room")
-        intensive_care = Room("Intensive Care", "in the medical intensive care room")
-        operating_room = Room("Operating Room", "in the medical operating room")
-        
-        # set exits
-        west_hall.setExit("north", control_room)
-        west_hall.setExit("south", command_room)
-        west_hall.setExit("east", transfer_room)
-        west_hall.setExit("west", water_room)
-        
-        east_hall.setExit("north", lab1)
-        east_hall.setExit("south", recovery_room)
-        east_hall.setExit("east", cafeteria)
-        east_hall.setExit("west", transfer_room)
-        
-        transfer_room.setExit("north", zuul_room)
-        transfer_room.setExit("south", faraday_room)
-        transfer_room.setExit("east", east_hall)
-        transfer_room.setExit("west", west_hall)
-        
-        zuul_room.setExit("south", transfer_room)
-        faraday_room.setExit("north", transfer_room)
-        
-        control_room.setExit("east", aux_room)
-        control_room.setExit("south", west_hall)
-        aux_room.setExit("west", control_room)
-        
-        command_room.setExit("north", west_hall)
-        command_room.setExit("east", communications_room)
-        communications_room.setExit("west", command_room)
-        
-        water_room.setExit("east", west_hall)
-        water_room.setExit("south", air_room)
-        air_room.setExit("north", water_room)
-        
-        lab1.setExit("west", lab2)
-        lab1.setExit("south", east_hall)
-        lab2.setExit("east", lab1)
-        
-        recovery_room.setExit("north", east_hall)
-        recovery_room.setExit("west", intensive_care)
-        intensive_care.setExit("east", recovery_room)
-        intensive_care.setExit("west", operating_room)
-        operating_room.setExit("east", intensive_care)
-        
-        cafeteria.setExit("west", east_hall)
-        
-        # set items =====================================================
-        lab1.addItem("zuul_manual")
-        lab2.addItem("toolkit")
-        command_room.addItem("faraday_manual")
-        control_room.addItem("blue_key")
-        aux_room.addItem("red_key")
-    
-        zuul_room.setLock("red_key")
-        faraday_room.setLock("blue_key")
-        
-        self.currentRoom = recovery_room    # start game in recovery room
-    
-        # cheat codes for end game
-        #self.inventory.append("blue_key")
-        #self.inventory.append("red_key")
-        #self.inventory.append("faraday_manual")
-        #self.inventory.append("zuul_manual")
-        #self.inventory.append("toolkit")
-        #self.currentRoom = faraday_room
-        
-        #I used this to cut to the end to save time when testing
-*/
 void Game::createRooms() {
     // -- main hallways
     Room* west_hall = new Room("West Hall", "in the West hallway");
@@ -293,55 +154,6 @@ string Game::getInventoryDescription() {
 }
 
 // Given a command, process (that is: execute) the command. If this command ends the game, true is returned, otherwise false is returned.  
-/*
-    def processCommand(self, command):
-        wantToQuit = False
-
-        if(command.isUnknown()):
-            print("I don't know what you mean...")
-            return False
-
-        commandWord = command.getCommandWord()
-        if (commandWord == "help"):
-            self.printHelp()
-        elif (commandWord == "go"):
-            self.goRoom(command)
-        elif (commandWord == "quit"):
-            wantToQuit = self.quitGame(command)
-        # Add look to see whats in current room.
-        elif (commandWord == "look"):
-            print(self.currentRoom.getLongDescription())
-        # Add inventory command to print my inventory
-        elif (commandWord == "inventory"):
-            print(self.getInventoryDescription())
-        # Add get command to get item from room and add it to my inventory
-        elif (commandWord == "get"):
-            itemToGet = command.getSecondWord()
-            if self.currentRoom:
-                if self.currentRoom.hasItem(itemToGet):
-                    self.inventory.append(itemToGet)
-                    self.currentRoom.removeItem(itemToGet)
-                    print("You've added " + itemToGet + " to your inventory")
-                else:
-                    print("Room does not have " + itemToGet + " item.")
-            else:
-                print("Error: Current room is not set!")
-        # Add drop command to drop item into current room.
-        elif (commandWord == "drop"):
-            itemToDrop = command.getSecondWord()
-            
-            if itemToDrop in self.inventory:
-                self.inventory.remove(itemToDrop)
-                self.currentRoom.addItem(itemToDrop)
-                print("You have dropped " + itemToDrop + ".")
-            else:
-                print("You do not have " + itemToDrop + " in your inventory!")
-
-        if self.quit:
-            wantToQuit = True
-            
-        return wantToQuit
-*/
 bool Game::processCommand(Command command) {
     bool wantToQuit = false;
 
@@ -403,6 +215,7 @@ void Game::printHelp() {
     parser.showCommands();
 }
 
+// Try to go to one direction. If there is an exit, enter the new room, otherwise print an error message.
 void Game::goRoom(Command command) {
     if(!command.hasSecondWord()) {
         cout << "Go where?" << endl;
