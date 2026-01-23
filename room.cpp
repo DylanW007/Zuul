@@ -117,10 +117,5 @@ string Room::getExitString() {
 // You are in the kitchen.
 // Exits: north west
 string Room::getLongDescription() {
-    cout << "getLongDescription called" << endl;
-    cout << "description: " << description << endl;
-    cout << "items description: " << getItemsDescription() << endl;
-    cout << "exit string: " << getExitString() << endl << endl;
-
     return "You are " + description + ".\n" + getItemsDescription() + "\n" + getExitString();
 }
